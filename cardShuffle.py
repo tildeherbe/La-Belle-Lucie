@@ -4,8 +4,6 @@ from cardBegin import *
 def cardShuffle(cardArray):
     random.shuffle(cardArray)
     shuffledTableau = []
-    #overflowPile = len(cardArray) % 3
-    #evenPiles = len(cardArray) // 3
 
     for i in range(0, len(cardArray), 3):
         card0 = cardArray[i]
@@ -22,8 +20,4 @@ def cardShuffle(cardArray):
         shuffledTableau.append([card0, card1, card2])
     return shuffledTableau 
 
-def main():
-    cardArray = generateCards()
-    print(cardShuffle(cardArray))
 
-main()
