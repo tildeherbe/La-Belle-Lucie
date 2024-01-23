@@ -1,5 +1,6 @@
 from cardBegin import *
 from cardShuffle import *
+from foundation import *
 
 def getMoveableCards(cardArray):
     moveableCards = []
@@ -15,17 +16,51 @@ def moveTableau(cardArray, moveableCards, stackFrom, stackTo, force):
         cardArray[stackTo].append(cardInHand)
         cardArray[stackFrom].pop(-1)
     return cardArray
+
+def moveFoundation(cardArray, foundation):
+    cardWasMoved = True
+    moveableCards = getMoveableCards(cardArray)
+    currentFoundation = foundation
+    currentCardArray = cardArray.copy()
+    while cardWasMoved == True:
+        bountyArray = []
+        cardWasMoved = False
+        for card in currentFoundation:
+            bountyCard = [card[0]+1, card[1]]
+            bountyArray.append(bountyCard)
+        for card in bountyArray:
+            for i in range(0,len(moveableCards)-1):
+                if card == moveableCards[i]:
+                    if card[1] == "S":
+                        currentFoundation = foundationChange(currentFoundation,card,0,0,0)
+                    if card[1] == "C":
+                        currentFoundation = foundationChange(currentFoundation,0,card,0,0) 
+                    if card[1] == "H":
+                        currentFoundation = foundationChange(currentFoundation,0,0,card,0) 
+                    if card[1] == "D":
+                        currentFoundation = foundationChange(currentFoundation,0,0,0,card) 
+                    currentCardArray = currentCardArray[i].pop(-1)
+                cardWasMoved = True
+    return currentCardArray, currentFoundation
     
+
+
+
+
 def main():
     cardArray = cardShuffle(generateCards())
     i = 0
     for card in cardArray:
         print( str(i) + " " + str(card) + "\n")
         i += 1
-    cardArray = moveTableau(cardArray, getMoveableCards(cardArray), 1, 0, True)
+    cardArray, foundation = moveFoundation(cardArray, foundationInitialize())
     i = 0
     for card in cardArray:
         print( str(i) + " " + str(card) + "\n")
         i += 1
-        
-main()
+    print(foundation)
+    
+
+
+if __name__ == "__main__":
+    main()
